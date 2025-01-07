@@ -1,8 +1,8 @@
 #include <Arduino.h>
 
 // Pin assignments
-#define LED_PIN 6
-#define CLK 11
+#define LED_PIN 11
+#define CLK 13
 #define DT 12
 #define SW 7
 #define BUTTON1_PIN 8
