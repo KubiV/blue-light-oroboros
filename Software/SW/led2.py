@@ -102,13 +102,17 @@ class LEDControlApp(QWidget):
         self.timer_layout.addWidget(self.timer_duration_input)
 
         self.timer_buttons_layout = QHBoxLayout()
-        self.timer_button = QPushButton("Start Timer")
+        self.timer_button = QPushButton("Start")
         self.timer_button.clicked.connect(self.start_timer)
         self.timer_buttons_layout.addWidget(self.timer_button)
 
-        self.timer_pause_button = QPushButton("Pause Timer")
+        self.timer_pause_button = QPushButton("Pause")
         self.timer_pause_button.clicked.connect(self.pause_timer)
         self.timer_buttons_layout.addWidget(self.timer_pause_button)
+
+        self.timer_reset_button = QPushButton("Reset")
+        self.timer_reset_button.clicked.connect(self.reset_timer)
+        self.timer_buttons_layout.addWidget(self.timer_reset_button)
 
         self.timer_layout.addLayout(self.timer_buttons_layout)
         self.timer_group.setLayout(self.timer_layout)
@@ -200,17 +204,26 @@ class LEDControlApp(QWidget):
         """Pause or resume the timer."""
         if self.timer.isActive():
             self.timer.stop()
-            self.timer_pause_button.setText("Resume Timer")
+            self.timer_pause_button.setText("Resume")
         else:
             self.timer.start(1000)
-            self.timer_pause_button.setText("Pause Timer")
+            self.timer_pause_button.setText("Pause")
+
+    def reset_timer(self):
+        """Reset the timer and brightness."""
+        self.timer.stop()
+        self.remaining_time_ms = 0
+        self.update_slider_and_send(0)
+        self.timer_countdown_label.setText("Time remaining: 00:00")
+        self.timer_pause_button.setText("Pause")
+        #QMessageBox.information(self, "Timer Reset", "Timer has been reset. Brightness set to 0.")
 
     def update_timer_countdown(self):
         """Update the countdown label with the remaining time."""
         self.remaining_time_ms -= 1000
         if self.remaining_time_ms <= 0:
             self.timer.stop()
-            self.send_brightness(0)
+            self.update_slider_and_send(0)
             self.timer_countdown_label.setText("Time remaining: 00:00")
             QMessageBox.information(self, "Timer Finished", "Timer has finished. Brightness reset to 0.")
         else:
