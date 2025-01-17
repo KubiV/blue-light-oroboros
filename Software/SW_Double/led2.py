@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import (
     QApplication, QVBoxLayout, QHBoxLayout, QSlider, QPushButton, QLineEdit, QLabel, QWidget,
-    QComboBox, QMessageBox, QGroupBox
+    QComboBox, QMessageBox, QGroupBox, QCheckBox
 )
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QTimer
 import serial
@@ -62,11 +62,75 @@ class LEDControlApp(QWidget):
             led_layout.addWidget(self.led_controls[led_id]["group"])
 
         self.main_layout.addLayout(led_layout)
+
+        # New section: Combined Timer for both LEDs
+        self.combined_timer_group = QGroupBox("Combined Timer for Both LEDs")
+        self.combined_timer_layout = QVBoxLayout()
+
+        self.sync_brightness_checkbox = QCheckBox("Sync Brightness for Both LEDs")
+        self.sync_brightness_checkbox.stateChanged.connect(self.toggle_sync_brightness)
+        self.combined_timer_layout.addWidget(self.sync_brightness_checkbox)
+
+        brightness_layout_1 = QHBoxLayout()
+        brightness_layout_1.addWidget(QLabel("LED 1"))
+        self.combined_brightness_input_1 = QLineEdit()
+        self.combined_brightness_input_1.setPlaceholderText("Brightness for LED 1 (0-255):")
+        brightness_layout_1.addWidget(self.combined_brightness_input_1)
+        self.combined_timer_layout.addLayout(brightness_layout_1)
+
+        brightness_layout_2 = QHBoxLayout()
+        brightness_layout_2.addWidget(QLabel("LED 2"))
+        self.combined_brightness_input_2 = QLineEdit()
+        self.combined_brightness_input_2.setPlaceholderText("Brightness for LED 2 (0-255):")
+        brightness_layout_2.addWidget(self.combined_brightness_input_2)
+        self.combined_timer_layout.addLayout(brightness_layout_2)
+
+        self.sync_time_checkbox = QCheckBox("Sync Timer Duration for Both LEDs")
+        self.sync_time_checkbox.stateChanged.connect(self.toggle_sync_time)
+        self.combined_timer_layout.addWidget(self.sync_time_checkbox)
+
+        duration_layout_1 = QHBoxLayout()
+        duration_layout_1.addWidget(QLabel("LED 1"))
+        self.combined_duration_input_1 = QLineEdit()
+        self.combined_duration_input_1.setPlaceholderText("Timer duration for LED 1 (minutes):")
+        duration_layout_1.addWidget(self.combined_duration_input_1)
+        self.combined_timer_layout.addLayout(duration_layout_1)
+
+        duration_layout_2 = QHBoxLayout()
+        duration_layout_2.addWidget(QLabel("LED 2"))
+        self.combined_duration_input_2 = QLineEdit()
+        self.combined_duration_input_2.setPlaceholderText("Timer duration for LED 2 (minutes):")
+        duration_layout_2.addWidget(self.combined_duration_input_2)
+        self.combined_timer_layout.addLayout(duration_layout_2)
+
+        self.combined_timer_start_button = QPushButton("Start Combined Timer")
+        self.combined_timer_start_button.clicked.connect(self.start_combined_timer)
+        self.combined_timer_layout.addWidget(self.combined_timer_start_button)
+
+        # Add pause and reset buttons for combined timer
+        combined_timer_buttons_layout = QHBoxLayout()
+        self.combined_timer_pause_button = QPushButton("Pause Combined Timer")
+        self.combined_timer_pause_button.clicked.connect(self.pause_combined_timer)
+        combined_timer_buttons_layout.addWidget(self.combined_timer_pause_button)
+
+        self.combined_timer_reset_button = QPushButton("Reset Combined Timer")
+        self.combined_timer_reset_button.clicked.connect(self.reset_combined_timer)
+        combined_timer_buttons_layout.addWidget(self.combined_timer_reset_button)
+
+        self.combined_timer_layout.addLayout(combined_timer_buttons_layout)
+
+        self.combined_timer_group.setLayout(self.combined_timer_layout)
+        self.main_layout.addWidget(self.combined_timer_group)
+
         self.setLayout(self.main_layout)
 
         # Serial connection
         self.arduino = None
         self.serial_thread = None
+
+        # Combined timer
+        self.combined_timer = None
+        self.combined_remaining_time = 0
 
     def create_led_controls(self, led_id):
         """Create controls for a single LED."""
@@ -248,6 +312,76 @@ class LEDControlApp(QWidget):
                 QMessageBox.warning(self, "Invalid Input", "Brightness must be between 0 and 255.")
         except ValueError:
             QMessageBox.warning(self, "Invalid Input", "Enter a valid integer for brightness.")
+
+    def toggle_sync_brightness(self, state):
+        if state == Qt.Checked:
+            self.combined_brightness_input_2.setDisabled(True)
+            self.combined_brightness_input_2.setText(self.combined_brightness_input_1.text())
+        else:
+            self.combined_brightness_input_2.setDisabled(False)
+
+    def toggle_sync_time(self, state):
+        if state == Qt.Checked:
+            self.combined_duration_input_2.setDisabled(True)
+            self.combined_duration_input_2.setText(self.combined_duration_input_1.text())
+        else:
+            self.combined_duration_input_2.setDisabled(False)
+
+    def start_combined_timer(self):
+        try:
+            brightness_1 = int(self.combined_brightness_input_1.text())
+            brightness_2 = int(self.combined_brightness_input_2.text()) if not self.sync_brightness_checkbox.isChecked() else brightness_1
+            duration_1 = float(self.combined_duration_input_1.text())
+            duration_2 = float(self.combined_duration_input_2.text()) if not self.sync_time_checkbox.isChecked() else duration_1
+
+            self.remaining_times[1] = int(duration_1 * 60 * 1000)
+            self.remaining_times[2] = int(duration_2 * 60 * 1000)
+
+            self.update_slider_and_send(brightness_1, self.led_controls[1]["slider"], self.combined_brightness_input_1, 1)
+            self.update_slider_and_send(brightness_2, self.led_controls[2]["slider"], self.combined_brightness_input_2, 2)
+
+            if self.combined_timer:
+                self.combined_timer.stop()
+
+            self.combined_timer = QTimer()
+            self.combined_timer.timeout.connect(self.update_combined_timer_countdown)
+            self.combined_timer.start(1000)
+        except ValueError:
+            QMessageBox.warning(self, "Invalid Input", "Enter valid brightness and duration for both LEDs.")
+
+    def update_combined_timer_countdown(self):
+        self.remaining_times[1] -= 1000
+        self.remaining_times[2] -= 1000
+        if self.remaining_times[1] <= 0 and self.remaining_times[2] <= 0:
+            self.combined_timer.stop()
+            self.update_slider_and_send(0, self.led_controls[1]["slider"], None, 1)
+            self.update_slider_and_send(0, self.led_controls[2]["slider"], None, 2)
+            self.led_controls[1]["timer_countdown_label"].setText("Time remaining: 00:00")
+            self.led_controls[2]["timer_countdown_label"].setText("Time remaining: 00:00")
+            QMessageBox.information(self, "Combined Timer Finished", "Combined Timer has finished. Brightness reset to 0 for both LEDs.")
+        else:
+            minutes_1, seconds_1 = divmod(self.remaining_times[1] // 1000, 60)
+            self.led_controls[1]["timer_countdown_label"].setText(f"Time remaining: {minutes_1:02}:{seconds_1:02}")
+            minutes_2, seconds_2 = divmod(self.remaining_times[2] // 1000, 60)
+            self.led_controls[2]["timer_countdown_label"].setText(f"Time remaining: {minutes_2:02}:{seconds_2:02}")
+
+    def pause_combined_timer(self):
+        if self.combined_timer and self.combined_timer.isActive():
+            self.combined_timer.stop()
+            self.combined_timer_pause_button.setText("Resume Combined Timer")
+        elif self.combined_timer:
+            self.combined_timer.start(1000)
+            self.combined_timer_pause_button.setText("Pause Combined Timer")
+
+    def reset_combined_timer(self):
+        if self.combined_timer:
+            self.combined_timer.stop()
+        self.remaining_times[1] = 0
+        self.remaining_times[2] = 0
+        self.update_slider_and_send(0, self.led_controls[1]["slider"], None, 1)
+        self.update_slider_and_send(0, self.led_controls[2]["slider"], None, 2)
+        self.led_controls[1]["timer_countdown_label"].setText("Time remaining: 00:00")
+        self.led_controls[2]["timer_countdown_label"].setText("Time remaining: 00:00")
 
     def closeEvent(self, event):
         if self.serial_thread:
