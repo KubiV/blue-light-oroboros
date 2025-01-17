@@ -54,6 +54,7 @@ class LEDControlApp(QWidget):
         # Section: Brightness settings
         self.brightness_group = QGroupBox("Brightness Settings")
         self.brightness_layout = QVBoxLayout()
+
         self.slider = QSlider(Qt.Horizontal)
         self.slider.setRange(0, 255)
         self.slider.valueChanged.connect(self.send_brightness)
@@ -90,6 +91,8 @@ class LEDControlApp(QWidget):
         # Section: Timer
         self.timer_group = QGroupBox("Timer")
         self.timer_layout = QVBoxLayout()
+
+        # Initialize timer_countdown_label
         self.timer_countdown_label = QLabel("Time remaining: 00:00")
         self.timer_layout.addWidget(self.timer_countdown_label)
 
