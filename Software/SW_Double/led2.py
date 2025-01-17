@@ -233,6 +233,12 @@ class LEDControlApp(QWidget):
             self.serial_thread = SerialReaderThread(self.arduino)
             self.serial_thread.brightness_received.connect(self.update_slider_from_signal)
             self.serial_thread.start()
+
+            # Set brightness to 0 for all LEDs
+            for led_id in self.led_controls:
+                self.update_slider_and_send(0, self.led_controls[led_id]["slider"], None, led_id)
+                self.led_controls[led_id]["input_field"].setText("0")
+
         except serial.SerialException as e:
             QMessageBox.critical(self, "Connection Failed", str(e))
             self.arduino = None
