@@ -3,7 +3,7 @@
 ## Úvod
 V této práci se zabýváme vývojem externího světelného LED zdroje pro přístroj Oroboros O2k, který slouží pro vysoce přesné monitorování respirační aktivity biologických a biochemických vzorků.
 
-![Aplikace pro ovládání LED](foto/machine.jpg)
+![Aplikace pro ovládání LED](Foto/machine.jpg)
 *Stroj Oroboros O2k s nasazeným světlem*
 
 ## Problém
@@ -12,16 +12,16 @@ Stávající světelné zdroje pro Oroboros O2k jsou drahé (až kolem 1000 Eur)
 ## Materiál a metody
 Náš systém zahrnuje řídící box s elektronikou založenou na Arduino Leonardo. K ovládání světel je použit rotační enkodér a 3 tlačítka, zatímco desktopová aplikace umožňuje softwarové nastavení PWM signálu (0–255) pro dvě LED diody. LED zdroje s dominantní vlnovou délkou 465 nm jsou integrovány do 3D tištěných pouzder. Experiment proběhl s bilirubinem rozpuštěným v BSA, kdy fotooxidační reakce bilirubinu (na lumirubin a biliverdinové deriváty) vedly k měření spotřeby kyslíku.
 
-![První prototyp](foto/breadboard.jpg)
+![První prototyp](Foto/breadboard.jpg)
 *První verze zapojení na nepájivém poli*
 
-![Protodeska](foto/proofboard_top.jpg)
+![Protodeska](Foto/proofboard_top.jpg)
 *Finální zapojení na prototypové desce*
 
 ## Technický popis
 Projekt využívá Arduino Leonardo pro řízení dvou LED diod, s PWM regulací a jednoduchým ovládáním pomocí enkodéru a tlačítek. Firmware na řídícím čipu přijímá sériové příkazy pro nastavení jasu jednotlivých LED. Uživatelská aplikace, vyvinutá v Pythonu s knihovnou PyQt5, umožňuje ovládání LED přes grafické rozhraní se samostatnými i synchronizovanými časovači, sliderem a textovým vstupem. Modularita hardwaru umožňuje rozšíření o další zdroje s různými vlnovými délkami.
 
-![Finální box](foto/dual.jpg)
+![Finální box](Foto/dual.jpg)
 *Finální box s možností připojení dvou LED světel*
 
 ## Výsledky
@@ -64,7 +64,7 @@ blue-light-oroboros/
 - Možnost synchronizace obou LED
 - Sériová komunikace s Arduino kontrolérem
 
-![Detail aplikace](foto/app.png)
+![Detail aplikace](Foto/app.png)
 *Uživatelské rozhraní aplikace pro ovládání LED světel*
 
 #### Vizualizační skripty
