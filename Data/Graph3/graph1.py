@@ -1,6 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
+
+mpl.rcParams['font.family'] = 'arial'
 
 # Načtení CSV souboru
 df = pd.read_csv("Data/CSV/difL/HPLCdataBRLR.csv", delimiter=';', decimal=',')
@@ -34,5 +37,5 @@ plt.title('Koncentrace Bilirubinu a Lumirubinu po osvitu vzorku různou intenzit
 plt.legend()
 plt.grid(axis='y', linestyle='--', alpha=0.5)
 plt.tight_layout()
-
+plt.savefig("graf.png", dpi=300)
 plt.show()

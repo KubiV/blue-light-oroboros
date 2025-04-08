@@ -1,6 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
+
+mpl.rcParams['font.family'] = 'arial'
 
 # Načtení CSV souborů
 df1 = pd.read_csv('/Users/jakubvavra/Library/Mobile Documents/com~apple~CloudDocs/LEK/SVK/BlueLight DATA/CSV/difL/L1vsL128.csv', delimiter=',', encoding='latin1')
@@ -80,4 +83,5 @@ ax1.set_ylim(0, 250)
 ax2.set_ylim(0, 80)
 
 plt.tight_layout()
+plt.savefig("graf.png", dpi=300)
 plt.show()
