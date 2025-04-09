@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
 
+plt.rcParams.update({'font.size': 18})
 mpl.rcParams['font.family'] = 'arial'
 
 # Načtení CSV souborů
@@ -33,11 +34,11 @@ cmap_conc = plt.cm.Blues
 cmap_slope = plt.cm.Reds
 
 # Plotování
-ax1.plot(df1['Time [min]'], df1['1A: O2 concentration [M]'], color=cmap_conc(0.2), label="c. O$_2$ L1")
-ax1.plot(df2['Time [min]'], df2['1B: O2 concentration [M]'], color=cmap_conc(0.4), label="c. O$_2$ L15")
-ax1.plot(df3['Time [min]'], df3['1A: O2 concentration [M]'], color=cmap_conc(0.6), label="c. O$_2$ L40")
-ax1.plot(df3['Time [min]'], df3['1B: O2 concentration [M]'], color=cmap_conc(0.8), label="c. O$_2$ L80")
-ax1.plot(df1['Time [min]'], df1['1B: O2 concentration [M]'], color=cmap_conc(1.0), label="c. O$_2$ L128")
+#ax1.plot(df1['Time [min]'], df1['1A: O2 concentration [M]'], color=cmap_conc(0.2), label="c. O$_2$ L1")
+#x1.plot(df2['Time [min]'], df2['1B: O2 concentration [M]'], color=cmap_conc(0.4), label="c. O$_2$ L15")
+#ax1.plot(df3['Time [min]'], df3['1A: O2 concentration [M]'], color=cmap_conc(0.6), label="c. O$_2$ L40")
+#ax1.plot(df3['Time [min]'], df3['1B: O2 concentration [M]'], color=cmap_conc(0.8), label="c. O$_2$ L80")
+#ax1.plot(df1['Time [min]'], df1['1B: O2 concentration [M]'], color=cmap_conc(1.0), label="c. O$_2$ L128")
 
 ax2.plot(df1['Time [min]'], df1['1A: O2 slope neg. [pmol/(s*mL)]'], color=cmap_slope(0.2), label="spotřeba O$_2$ L1")
 ax2.plot(df2['Time [min]'], df2['1B: O2 slope neg. [pmol/(s*mL)]'], color=cmap_slope(0.4), label="spotřeba O$_2$ L15")
@@ -58,9 +59,9 @@ for t in light_off_times.unique():
 
 # Popisky a legenda
 ax1.set_xlabel('Čas [min]')
-ax1.set_ylabel('Koncentrace O$_2$ [uM]', color='blue')
+#ax1.set_ylabel('Koncentrace O$_2$ [uM]', color='blue')
 ax2.set_ylabel('Spotřeba O$_2$ [pmol/(s*mL)]', color='red')
-ax1.set_title('Koncentrace a spotřeba O$_2$ vzorku BR o koncentraci 245 umol/l, různý jas modrého světla')
+#ax1.set_title('Koncentrace a spotřeba O$_2$ vzorku BR o koncentraci 245 umol/l, různý jas modrého světla')
 
 # Přeskupení legendy, aby "ZAPNUTÍ" a "VYPNUTÍ" byly na konci a bez duplikací
 handles1, labels1 = ax1.get_legend_handles_labels()
@@ -74,14 +75,14 @@ zap_vyp_handles = [plt.Line2D([0], [0], color='green', linestyle="--"),
 zap_vyp_labels = ["ZAPNUTÍ", "VYPNUTÍ"]
 
 # Aktualizovaná legenda bez duplikací
-ax1.legend(handles + zap_vyp_handles, labels + zap_vyp_labels, loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=6)#loc='upper right'
+#ax1.legend(handles + zap_vyp_handles, labels + zap_vyp_labels, loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=6)#loc='upper right'
 
-ax1.tick_params(axis='y', labelcolor='blue')
+#ax1.tick_params(axis='y', labelcolor='blue')
 ax2.tick_params(axis='y', labelcolor='red')
 ax1.set_xlim(-5, 70)
-ax1.set_ylim(0, 250)
+#ax1.set_ylim(0, 250)
 ax2.set_ylim(0, 80)
 
 plt.tight_layout()
-plt.savefig("graf.png", dpi=300)
+plt.savefig("graf_ruznyjas.png", dpi=300)
 plt.show()

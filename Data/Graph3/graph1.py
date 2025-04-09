@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
 
+plt.rcParams.update({'font.size': 18})
 mpl.rcParams['font.family'] = 'arial'
 
 # Načtení CSV souboru
@@ -33,9 +34,9 @@ plt.bar(x + bar_width/2, lr, bar_width, label='Lumirubin', color='salmon', alpha
 plt.xticks(x, intensity)
 plt.xlabel('Intenzita světla [hodnota PWM 8bit signálu]')
 plt.ylabel('Koncentrace [µmol/l]')
-plt.title('Koncentrace Bilirubinu a Lumirubinu po osvitu vzorku různou intenzitou po dobu 1 h')
+#plt.title('Koncentrace bilirubinu a lumirubinu po osvitu vzorku různou intenzitou po dobu 1 h')
 plt.legend()
 plt.grid(axis='y', linestyle='--', alpha=0.5)
 plt.tight_layout()
-plt.savefig("graf.png", dpi=300)
+plt.savefig("graf_brxlr.png", dpi=300)
 plt.show()

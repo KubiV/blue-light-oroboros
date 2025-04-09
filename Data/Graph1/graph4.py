@@ -127,5 +127,5 @@ ax1.set_xlim(-5, 70)
 ax2.set_ylim(1, 20)
 
 plt.tight_layout()
-plt.savefig("graf.png", dpi=300)
+plt.savefig("graf_brxbsa.png", dpi=300)
 plt.show()
