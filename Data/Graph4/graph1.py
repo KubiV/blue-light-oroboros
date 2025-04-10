@@ -5,7 +5,7 @@ from scipy.optimize import curve_fit
 import matplotlib as mpl
 
 # Nastavení Arial fontu
-plt.rcParams.update({'font.size': 18})
+#plt.rcParams.update({'font.size': 18})
 mpl.rcParams['font.family'] = 'Arial'
 
 # Načtení dat
@@ -36,11 +36,11 @@ plt.scatter(x, y, color='blue', label='Naměřené body')
 #    plt.annotate(f'({x[i]}, {y[i]:.0f})', (x[i], y[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8)
 
 # Popisky a mřížka
-#plt.title('Závislost intenzity na PWM signálu', fontsize=14)
+plt.title('Závislost intenzity na PWM signálu', fontsize=14)
 plt.xlabel('PWM hodnota (8bit)')
 plt.ylabel('Intenzita [μW/cm²]')
 plt.grid(True)
-#plt.legend()
+plt.legend()
 plt.tight_layout()
 plt.savefig("graf_pwnxintenzita.png", dpi=300)
 plt.show()

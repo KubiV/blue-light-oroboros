@@ -27,6 +27,11 @@ Projekt využívá Arduino Leonardo pro řízení dvou LED diod, s PWM regulací
 ## Výsledky
 Vyvinutý systém umožňuje individuální i synchronizované ovládání obou LED světel, včetně časovačů pro přesné nastavení trvání osvětlení. Software poskytuje interaktivní slider, tlačítka předvoleb a možnost zadat konkrétní hodnoty jasu, což vede ke spolehlivému monitorování spotřeby kyslíku a k analýze fotoproduktů.
 
+![Různý jas světla](Foto/graf_ruznyjas.png)
+![Různé koncentrace BR](Foto/graf_brxbsa.png)
+![Koncentrace BR a LR](Foto/graf_brxlr.png)
+![Intenzita a PWM světelného zdroje](Foto/graf_pwnxintenzita.png)
+
 ## Závěr a diskuse
 Náš LED zdroj představuje praktickou a ekonomickou alternativu k původním řešením. Jeho modularita umožňuje rozšíření o další světelné zdroje s různými vlnovými délkami. Experiment s bilirubinem ukázal, že naše řešení umožňuje precizní kontrolu osvětlení, což výrazně ovlivňuje experimentální podmínky a kvalitu dat.
 
