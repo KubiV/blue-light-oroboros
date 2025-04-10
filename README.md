@@ -7,7 +7,7 @@ V této práci se zabýváme vývojem externího světelného LED zdroje pro př
 *Stroj Oroboros O2k s nasazeným světlem*
 
 ## Problém
-Stávající světelné zdroje pro Oroboros O2k jsou drahé (až kolem 1000 Eur) a u starších modelů již nedostupné. Naším cílem bylo navrhnout cenově dostupnou a modulární alternativu, která by umožnila precizní experimentální podmínky.
+Stávající světelné zdroje pro Oroboros O2k jsou drahé a u starších modelů již nedostupné. Naším cílem bylo navrhnout cenově dostupnou a modulární alternativu, která by umožnila precizní experimentální podmínky.
 
 ## Materiál a metody
 Náš systém zahrnuje řídící box s elektronikou založenou na Arduino Leonardo. K ovládání světel je použit rotační enkodér a 3 tlačítka, zatímco desktopová aplikace umožňuje softwarové nastavení PWM signálu (0–255) pro dvě LED diody. LED zdroje s dominantní vlnovou délkou 465 nm jsou integrovány do 3D tištěných pouzder. Experiment proběhl s bilirubinem rozpuštěným v BSA, kdy fotooxidační reakce bilirubinu (na lumirubin a biliverdinové deriváty) vedly k měření spotřeby kyslíku.
@@ -40,6 +40,7 @@ Náš LED zdroj představuje praktickou a ekonomickou alternativu k původním �
 ### Struktura projektu
 ```
 blue-light-oroboros/
+├── requirements.txt         # Seznam závislostí pro Python aplikaci a generování grafů
 ├── Software/
 │   └── SW_Dual/
 │       ├── led/
@@ -48,11 +49,18 @@ blue-light-oroboros/
 ├── Data/
 │   ├── Graph1/
 │   │   └── graph4.py        # Vizualizace dat - koncentrace BR
-│   └── Graph2/
-│       └── graph1.py        # Vizualizace dat - různé intenzity světla
+│   ├── Graph2/
+│   │   └── graph1.py        # Vizualizace dat - různé intenzity světla
+│   ├── Graph3/
+│   │   └── graph1.py        # Vizualizace dat - porovnání BR a LR v různých vzorcích
+│   └── Graph4/
+│       └── graph1.py        # Vizualizace dat - závislost intenzity a PWM
+├── CAD/
+│   ├── 3D print/
+│   │   └── BlueLight.3mf    # Detaily pro tisk ve formátu 3MF (LED světlo)
+│   └── BlueLight.step       # Zdrojový STEP soubor pro 3D model (LED světlo)
 └── Docs/
-    └── Instrukce.pdf        # Instrukce pro sestavení
-```
+  └── Instrukce.pdf          # Instrukce pro sestavení kryu LED světla
 
 ### Popis komponent
 
